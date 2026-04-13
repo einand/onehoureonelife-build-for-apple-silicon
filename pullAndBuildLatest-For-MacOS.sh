@@ -128,7 +128,7 @@ patch_configure() {
         next
     }
     { print }
-    ' "$configure" > "$configure.tmp" && mv "$configure.tmp" "$configure"
+    ' "$configure" > "$configure.tmp" && mv "$configure.tmp" "$configure" && chmod +x "$configure"
 
     log "configure patched with platform 5 (MacOSX_local)."
 }
