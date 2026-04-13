@@ -114,11 +114,21 @@ patch_configure() {
     sed -i '' 's/if \[ "$platformSelection" -gt "4" \]/if [ "$platformSelection" -gt "5" ]/' "$configure"
     sed -i '' '/echo "  4 --  Raspbian on Raspberry Pi (experimental)"/a\
 \    echo "  5 --  MacOSX (local SDL 1.2)"' "$configure"
-    sed -i '' '/"4" )/a\
-\    "5" )\
-\        platformName="MacOSX_local"\
-\        platformMakefile="$makefilePath/Makefile.MacOSX_local"\
-\    ;;' "$configure"
+
+    awk '
+    /"4" \)/ { in_raspbian=1 }
+    in_raspbian && /;;/ {
+        print
+        print ""
+        print "    \"5\" )"
+        print "        platformName=\"MacOSX_local\""
+        print "        platformMakefile=\"$makefilePath/Makefile.MacOSX_local\""
+        print "    ;;"
+        in_raspbian=0
+        next
+    }
+    { print }
+    ' "$configure" > "$configure.tmp" && mv "$configure.tmp" "$configure"
 
     log "configure patched with platform 5 (MacOSX_local)."
 }
