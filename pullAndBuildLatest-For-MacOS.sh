@@ -157,6 +157,22 @@ install_sdlmain() {
     fi
 }
 
+patch_freeSprite_null() {
+    local file="$BASEDIR/minorGems/game/platforms/openGL/gameGraphicsGL.cpp"
+
+    if grep -q 'if.*inSprite.*NULL' "$file"; then
+        log "freeSprite null-check already patched — skipping."
+        return 0
+    fi
+
+    log "Patching freeSprite() with null-pointer guard..."
+
+    sed -i '' 's/void freeSprite( SpriteHandle inSprite ) {/void freeSprite( SpriteHandle inSprite ) {\
+    if( inSprite == NULL ) return;/' "$file"
+
+    log "freeSprite null-check patched."
+}
+
 convert_png_to_tga() {
     local gfx_src="$BASEDIR/OneLife/gameSource/graphicsSource"
     local gfx_dst="$BASEDIR/OneLife/gameSource/graphics"
@@ -392,6 +408,7 @@ main() {
     patch_configure
     install_makefile
     install_sdlmain
+    patch_freeSprite_null
     convert_png_to_tga
     configure_and_build
     download_icon
