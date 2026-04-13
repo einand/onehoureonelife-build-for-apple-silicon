@@ -279,7 +279,7 @@ if [ ! -f "$ONELIFE_HOME/settings/fullscreen.ini" ]; then
     cp "$RESOURCES/defaults/"* "$ONELIFE_HOME/settings/" 2>/dev/null
 fi
 
-printf '%s' "$APP_DIR" > "$HOME/Library/Preferences/OneLifeApp_prefs.txt"
+printf '%s' "$RESOURCES" > "$HOME/Library/Preferences/OneLifeApp_prefs.txt"
 
 cd "$RESOURCES" || exit 1
 ln -sf "$ONELIFE_HOME/settings" . 2>/dev/null
@@ -317,7 +317,7 @@ link_game_data() {
     done
 
     if [ ! -e "$res/dataVersionNumber.txt" ]; then
-        ln -sf "../../OneLifeData7/dataVersionNumber.txt" "$res/dataVersionNumber.txt"
+        ln -sf "../../../OneLifeData7/dataVersionNumber.txt" "$res/dataVersionNumber.txt"
     fi
 
     mkdir -p "$res/graphics"
