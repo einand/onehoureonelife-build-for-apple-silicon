@@ -1,0 +1,35 @@
+#
+# Custom macOS Makefile fragment for building OneLife natively
+# Uses SDL 1.2.15 from local depot/ (built with Cocoa backend)
+#
+# __DEPOT_PATH__ is replaced by the build script with the actual depot path
+#
+
+DEPOT = __DEPOT_PATH__
+
+SDL_INC = -I$(DEPOT)/sdl1/include
+SDL_LIB = $(DEPOT)/sdl1/lib/libSDL.a $(DEPOT)/sdl1/lib/libSDLmain.a
+
+PLATFORM_COMPILE_FLAGS = -DBSD -D__mac__ -I/System/Library/Frameworks/OpenGL.framework/Headers $(SDL_INC)
+
+PLATFORM_LINK_FLAGS = -framework OpenGL -framework Cocoa -framework CoreAudio -framework CoreVideo -framework AudioUnit -framework AudioToolbox -framework ForceFeedback -framework Carbon -framework IOKit -framework CoreData -framework Foundation -framework Metal -framework GameController -framework CoreHaptics -framework QuartzCore $(SDL_LIB) mac/SDLMain_compat.m ${CUSTOM_MACOSX_LINK_FLAGS}
+
+PLATFORM_LINK_FLAGS_HEADLESS = ${CUSTOM_MACOSX_LINK_FLAGS}
+
+PLATFORM_LIBJPEG_FLAG = /usr/lib/libjpeg.a
+PLATFORM_LIBPNG_FLAG = /usr/lib/libz.a /usr/lib/libpng.a
+
+GXX = g++
+LINK_FLAGS =
+
+PLATFORM = Linux
+PLATFORM_PATH = linux
+
+TIME_PLATFORM = Unix
+TIME_PLATFORM_PATH = unix
+
+DIRECTORY_PLATFORM = Unix
+DIRECTORY_PLATFORM_PATH = unix
+
+POLL_PLATFORM = Unix
+POLL_PLATFORM_PATH = unix
