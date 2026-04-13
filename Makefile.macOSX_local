@@ -12,7 +12,7 @@ SDL_LIB = $(DEPOT)/sdl1/lib/libSDL.a $(DEPOT)/sdl1/lib/libSDLmain.a
 
 PLATFORM_COMPILE_FLAGS = -DBSD -D__mac__ -I/System/Library/Frameworks/OpenGL.framework/Headers $(SDL_INC)
 
-PLATFORM_LINK_FLAGS = -framework OpenGL -framework Cocoa -framework CoreAudio -framework CoreVideo -framework AudioUnit -framework AudioToolbox -framework ForceFeedback -framework Carbon -framework IOKit -framework CoreData -framework Foundation -framework Metal -framework GameController -framework CoreHaptics -framework QuartzCore $(SDL_LIB) mac/SDLMain_compat.m ${CUSTOM_MACOSX_LINK_FLAGS}
+PLATFORM_LINK_FLAGS = -framework OpenGL -framework Cocoa -framework CoreAudio -framework CoreVideo -framework AudioUnit -framework AudioToolbox -framework ForceFeedback -framework Carbon -framework IOKit -framework CoreData -framework Foundation -framework Metal -framework GameController -framework CoreHaptics -framework QuartzCore $(SDL_LIB) ../../minorGems/game/platforms/SDL/mac/SDLMain_compat.m ${CUSTOM_MACOSX_LINK_FLAGS}
 
 PLATFORM_LINK_FLAGS_HEADLESS = ${CUSTOM_MACOSX_LINK_FLAGS}
 
