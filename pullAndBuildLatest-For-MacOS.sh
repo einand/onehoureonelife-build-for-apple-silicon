@@ -63,7 +63,7 @@ checkout_latest() {
     log "OneLifeData7 → OneLife_v$tag_data"
 
     cd "$DEPOT/SDL-1.2.15"
-    git checkout -q release-1.2.15 2>/dev/null || true
+    git checkout -q main 2>/dev/null || git checkout -q master 2>/dev/null || true
 
     cd "$BASEDIR"
 
@@ -81,7 +81,7 @@ build_sdl() {
     log "Building SDL 1.2.15 (static, arm64 Cocoa backend)..."
 
     cd "$DEPOT/SDL-1.2.15"
-    mkdir -p sdl1
+    mkdir -p "$DEPOT/sdl1"
 
     ./configure \
         --prefix="$DEPOT/sdl1" \
@@ -127,10 +127,7 @@ install_makefile() {
     local target="$BASEDIR/minorGems/game/platforms/SDL/Makefile.MacOSX_local"
     local src="$BASEDIR/Makefile.macOSX_local"
 
-    if [ ! -f "$src" ]; then
-        log "Creating Makefile.MacOSX_local from repo template..."
-        src="$BASEDIR/onehoureonelife-build-for-apple-silicon/Makefile.macOSX_local"
-    fi
+    [ ! -f "$src" ] && src="$BASEDIR/Makefile.macOSX_local"
 
     sed "s|__DEPOT_PATH__|$DEPOT|g" "$src" > "$target"
     log "Makefile.MacOSX_local written to minorGems (depot=$DEPOT)."
@@ -140,9 +137,7 @@ install_sdlmain() {
     local target_dir="$BASEDIR/minorGems/game/platforms/SDL/mac"
     local src="$BASEDIR/mac/SDLMain_compat.m"
 
-    if [ ! -f "$src" ]; then
-        src="$BASEDIR/onehoureonelife-build-for-apple-silicon/mac/SDLMain_compat.m"
-    fi
+    [ ! -f "$src" ] && src="$BASEDIR/minorGems/game/platforms/SDL/mac/SDLMain_compat.m"
 
     if [ ! -f "$target_dir/SDLMain_compat.m" ] || ! diff -q "$src" "$target_dir/SDLMain_compat.m" &>/dev/null; then
         cp "$src" "$target_dir/SDLMain_compat.m"
@@ -191,15 +186,22 @@ configure_and_build() {
 download_icon() {
     local icon_dir="$BUNDLE_RESOURCES"
     local icon_png="$icon_dir/icon_512.png"
+    local icon_src="$BASEDIR/icon_512.png"
 
     if [ -f "$icon_png" ]; then
         log "Icon already present — skipping."
         return 0
     fi
 
-    log "Downloading app icon..."
     mkdir -p "$icon_dir"
-    curl -sL "$ICON_URL" -o "$icon_png"
+
+    if [ -f "$icon_src" ]; then
+        cp "$icon_src" "$icon_png"
+        log "Icon copied from repo."
+    else
+        log "Downloading app icon..."
+        curl -sL "$ICON_URL" -o "$icon_png"
+    fi
 }
 
 create_icns() {
@@ -265,9 +267,7 @@ LAUNCHER
     chmod +x "$launcher"
 
     local plist_src="$BASEDIR/Info.plist"
-    if [ ! -f "$plist_src" ]; then
-        plist_src="$BASEDIR/onehoureonelife-build-for-apple-silicon/Info.plist"
-    fi
+    [ ! -f "$plist_src" ] && plist_src="$BASEDIR/Info.plist"
     cp "$plist_src" "$APP_BUNDLE/Contents/Info.plist"
 
     local defaults_src="$BASEDIR/defaults"

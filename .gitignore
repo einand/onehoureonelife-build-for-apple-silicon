@@ -1,0 +1,33 @@
+# Cloned repositories
+/minorGems/
+/OneLife/
+/OneLifeData7/
+/depot/
+
+# Build output
+/OneLifeApp.app/
+/OneLifeApp
+/icon.iconset/
+/dataVersionNumber.txt
+/graphics/
+/otherSounds/
+/settings/
+/languages/
+/sounds/
+/animations
+/categories
+/ground
+/music
+/objects
+/sprites
+/transitions
+/contentSettings
+/reverbCache/
+/groundTileCache/
+/recordGame/
+/playbackGame/
+/photoCache/
+/gameLog.txt
+
+# macOS
+.DS_Store
